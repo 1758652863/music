@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>网页音乐播放器-郑伟皓-24215220223</title>
+    <title>网页音乐播放器-郑伟皓_24215220223</title>
     <link rel="stylesheet" href="./css/index.css">
 </head>
 <body>
@@ -11,7 +11,7 @@
 
     <div class="player-container">
         <header class="header">
-            <h1>音乐在线播放-郑伟皓-24215220223</h1>
+            <h1>音乐在线播放-开发人：郑伟皓 (学号: 24215220223)</h1>
         </header>
 
         <main class="main-content">
@@ -37,7 +37,7 @@
 
             <div class="controls">
                 <img src="./img/上一首.png" id="btn-prev" class="btn" alt="上一首">
-                <img src="./img/继续播放.png" id="btn-play" class="btn play-btn" alt="播放/暂停">
+                <img src="./img/播放.png" id="btn-play" class="btn play-btn" alt="播放/暂停">
                 <img src="./img/下一首.png" id="btn-next" class="btn" alt="下一首">
                 
                 <div class="volume-control">
@@ -45,9 +45,18 @@
                     <input type="range" id="volume-bar" min="0" max="1" value="0.5" step="0.01">
                 </div>
                 
+                <img src="./img/MV.png" id="btn-mv" class="icon" alt="播放MV" title="观看MV">
+                
                 <img src="./img/列表.png" id="btn-list" class="icon" alt="播放列表">
             </div>
         </footer>
+    </div>
+
+    <div class="video-overlay" id="video-overlay">
+        <div class="video-container">
+            <span class="close-btn" id="close-video">关闭 ✖</span>
+            <video id="mv-player" controls></video> 
+        </div>
     </div>
 
     <script src="./js/index.js"></script>
