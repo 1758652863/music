@@ -1,9 +1,9 @@
-// 1. 定义播放列表数据 (对应你的 mp3 和 img 文件夹素材)
+// 1. 定义播放列表数据（加入了 mv 路径）
 const playlist = [
-    { title: "歌曲一", artist: "未知歌手", src: "./mp3/music0.mp3", cover: "./img/record0.jpg", bg: "./img/bg0.png" },
-    { title: "歌曲二", artist: "未知歌手", src: "./mp3/music1.mp3", cover: "./img/record1.jpg", bg: "./img/bg1.png" },
-    { title: "歌曲三", artist: "未知歌手", src: "./mp3/music2.mp3", cover: "./img/record2.jpg", bg: "./img/bg2.png" },
-    { title: "歌曲四", artist: "未知歌手", src: "./mp3/music3.mp3", cover: "./img/record3.jpg", bg: "./img/bg3.png" }
+    { title: "歌曲一", artist: "未知歌手", src: "./mp3/music0.mp3", cover: "./img/record0.jpg", bg: "./img/bg0.png", mv: "./mp4/video0.mp4" },
+    { title: "歌曲二", artist: "未知歌手", src: "./mp3/music1.mp3", cover: "./img/record1.jpg", bg: "./img/bg1.png", mv: "./mp4/video1.mp4" },
+    { title: "歌曲三", artist: "未知歌手", src: "./mp3/music2.mp3", cover: "./img/record2.jpg", bg: "./img/bg2.png", mv: "./mp4/video2.mp4" },
+    { title: "歌曲四", artist: "未知歌手", src: "./mp3/music3.mp3", cover: "./img/record3.jpg", bg: "./img/bg3.png", mv: "./mp4/video3.mp4" }
 ];
 
 let currentIndex = 0; // 当前播放歌曲的索引
@@ -23,6 +23,12 @@ const currentTimeDisplay = document.getElementById('current-time');
 const durationDisplay = document.getElementById('duration');
 const volumeBar = document.getElementById('volume-bar');
 
+// 获取MV相关元素
+const btnMv = document.getElementById('btn-mv');
+const videoOverlay = document.getElementById('video-overlay');
+const mvPlayer = document.getElementById('mv-player');
+const closeVideoBtn = document.getElementById('close-video');
+
 // 2. 初始化加载歌曲信息
 function loadSong(index) {
     const song = playlist[index];
@@ -31,8 +37,8 @@ function loadSong(index) {
     songArtist.innerText = `歌手：${song.artist}`;
     coverImg.src = song.cover;
     bgLayer.style.backgroundImage = `url('${song.bg}')`;
+    mvPlayer.src = song.mv; // 预加载对应MV
     
-    // 每次切歌重置进度条
     progressBar.value = 0;
     currentTimeDisplay.innerText = "00:00";
 }
@@ -41,12 +47,12 @@ function loadSong(index) {
 function togglePlay() {
     if (audio.paused) {
         audio.play();
-        playBtn.src = "./img/暂停.png"; // 切换为暂停图标
-        record.classList.add('playing'); // 开启唱片旋转
+        playBtn.src = "./img/暂停.png"; 
+        record.classList.add('playing'); 
     } else {
         audio.pause();
-        playBtn.src = "./img/继续播放.png"; // 切换为播放图标
-        record.classList.remove('playing'); // 停止唱片旋转
+        playBtn.src = "./img/播放.png"; 
+        record.classList.remove('playing'); 
     }
 }
 
@@ -54,7 +60,7 @@ function togglePlay() {
 function prevSong() {
     currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
     loadSong(currentIndex);
-    if (!audio.paused) audio.play(); // 如果之前在播放，切歌后继续播放
+    if (!audio.paused) audio.play();
 }
 
 function nextSong() {
@@ -65,12 +71,9 @@ function nextSong() {
 
 // 5. 进度条联动与时间显示
 audio.addEventListener('timeupdate', () => {
-    // 更新进度条位置
     if (audio.duration) {
         const progressPercent = (audio.currentTime / audio.duration) * 100;
         progressBar.value = progressPercent;
-        
-        // 更新时间显示 (调用老师提供的格式化函数)
         currentTimeDisplay.innerText = transTime(audio.currentTime);
         durationDisplay.innerText = transTime(audio.duration);
     }
@@ -90,16 +93,39 @@ volumeBar.addEventListener('input', (e) => {
 // 歌曲播放完毕自动下一首
 audio.addEventListener('ended', nextSong);
 
-// 绑定按钮点击事件
+// 绑定音乐控制按钮点击事件
 playBtn.addEventListener('click', togglePlay);
 prevBtn.addEventListener('click', prevSong);
 nextBtn.addEventListener('click', nextSong);
+
+// ================= MV 播放交互逻辑 =================
+btnMv.addEventListener('click', () => {
+    // 1. 确保MV路径是对的
+    mvPlayer.src = playlist[currentIndex].mv;
+    
+    // 2. 如果音乐正在播放，先暂停音乐并修改图标状态
+    if (!audio.paused) {
+        audio.pause();
+        playBtn.src = "./img/播放.png";
+        record.classList.remove('playing');
+    }
+    
+    // 3. 弹出视频并自动播放
+    videoOverlay.style.display = 'flex';
+    mvPlayer.play();
+});
+
+// 关闭视频弹窗
+closeVideoBtn.addEventListener('click', () => {
+    mvPlayer.pause();
+    videoOverlay.style.display = 'none';
+});
 
 // 初次加载第一首歌
 loadSong(currentIndex);
 
 
-/* ================= 以下为素材截图中提供的播放时间换算代码 ================= */
+/* ================= 播放时间换算代码 ================= */
 function transTime(value) {
     var time = "";
     var h = parseInt(value / 3600);
