@@ -18,7 +18,7 @@ body {
     width: 100vw;
     height: 100vh;
     background: url('../img/bg0.png') no-repeat center center / cover;
-    filter: blur(20px) brightness(0.4); /* 模糊并变暗 */
+    filter: blur(20px) brightness(0.4);
     z-index: -1;
     transition: background 0.5s ease;
 }
@@ -61,12 +61,12 @@ body {
     height: 200px;
     border-radius: 50%;
     overflow: hidden;
-    animation: rotate 10s linear infinite; /* 定义旋转动画 */
-    animation-play-state: paused; /* 默认暂停 */
+    animation: rotate 10s linear infinite;
+    animation-play-state: paused; 
 }
 
 .record.playing {
-    animation-play-state: running; /* 播放时运行动画 */
+    animation-play-state: running; 
 }
 
 .record img {
@@ -135,6 +135,10 @@ body {
 .icon {
     width: 25px;
     cursor: pointer;
+    transition: transform 0.2s;
+}
+.icon:hover {
+    transform: scale(1.2);
 }
 
 .volume-control {
@@ -142,4 +146,46 @@ body {
     align-items: center;
     gap: 10px;
     margin-left: 30px;
+}
+
+/* ================= MV播放遮罩层样式 ================= */
+.video-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: none; 
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.video-container {
+    position: relative;
+    width: 80%;
+    max-width: 800px;
+}
+
+.video-container video {
+    width: 100%;
+    border-radius: 10px;
+    outline: none;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    background-color: #000;
+}
+
+.close-btn {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+.close-btn:hover {
+    color: #fff;
 }
