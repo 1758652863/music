@@ -51,7 +51,7 @@ function togglePlay() {
         record.classList.add('playing'); 
     } else {
         audio.pause();
-        playBtn.src = "./img/播放.png"; 
+        playBtn.src = "./img/继续播放.png"; 
         record.classList.remove('playing'); 
     }
 }
